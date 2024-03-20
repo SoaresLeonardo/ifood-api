@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710693264334,
+      "tag": "0000_natural_the_anarchist",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710845247229,
+      "tag": "0001_famous_mikhail_rasputin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710932490118,
+      "tag": "0002_unknown_rocket_raccoon",
+      "breakpoints": true
+    }
+  ]
+}
