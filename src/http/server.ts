@@ -19,6 +19,8 @@ import { getManagedRestaurantRoute } from "./routes/get-managed-restaurant.route
 import { updateMenuRestaurantRoute } from "./routes/update-menu-restaurant.route";
 import { getOrdersRestaurantRoute } from "./routes/get-orders-restaurant.route";
 import { getOrderDetailsRoute } from "./routes/get-order-details.route";
+import { getOrderItemsRoute } from "./routes/get-order-items.route";
+import { approveOrder } from "./routes/approve-order.route";
 
 new Elysia()
   .use(
@@ -56,6 +58,8 @@ new Elysia()
   .use(updateMenuRestaurantRoute)
   .use(getOrdersRestaurantRoute)
   .use(getOrderDetailsRoute)
+  .use(getOrderItemsRoute)
+  .use(approveOrder)
 
   .listen(3333, ({ hostname, port }) => {
     console.log(`🔥 HTTP server running at http://${hostname}:${port}`);

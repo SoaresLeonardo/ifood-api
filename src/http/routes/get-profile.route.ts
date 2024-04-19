@@ -8,7 +8,7 @@ export const getProfileRoute = new Elysia()
   .get("/me", async ({ getCurrentUser }) => {
     const { sub: userId } = await getCurrentUser();
 
-    const user = await db.query.users.findMany({
+    const user = await db.query.users.findFirst({
       where(fields, { eq }) {
         return eq(fields.id, userId);
       },

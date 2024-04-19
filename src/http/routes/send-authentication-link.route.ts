@@ -34,16 +34,16 @@ export const sendAuthenticationLinkRoute = new Elysia().post(
 
     console.log(authLink.toString());
 
-    // await resend.emails.send({
-    //   from: "Acme <onboarding@resend.dev>",
-    //   to: email,
-    //   subject: "Faça login na Burger",
-    //   react: AuthenticationMagicLinkTemplate({
-    //     userEmail: email,
-    //     userName: user.name,
-    //     authLink: authLink.toString(),
-    //   }),
-    // });
+  //  await resend.emails.send({
+  //    from: "Acme <onboarding@resend.dev>",
+  //    to: email,
+  //    subject: "Faça login na Burger Shop",
+  //    react: AuthenticationMagicLinkTemplate({
+  //      userEmail: email,
+  //      userName: user.name,
+  //      authLink: authLink.toString(),
+  //    }),
+  //  });
   },
   {
     body: t.Object({
