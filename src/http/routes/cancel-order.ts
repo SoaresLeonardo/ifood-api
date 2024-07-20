@@ -1,18 +1,18 @@
-import { Elysia, t } from "elysia";
+import Elysia, { t } from "elysia";
 import { authentication } from "../../authentication";
 import { db } from "../../db/connection";
+import { NotAManagerError } from "./errors/not-a-manager";
 import { UnauthorizedError } from "./errors/unauthorized-errors";
 import { orders } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
-export const deliverOrder = new Elysia().use(authentication).patch(
-  "/orders/:id/deliver",
-  async ({ getCurrentUser, set, params }) => {
-    const { id: orderId } = params;
+export const canceledOrder = new Elysia().use(authentication).patch(
+  "/orders/:id/cancel",
+  async ({ params: { id: orderId }, set, getCurrentUser }) => {
     const { restaurantId } = await getCurrentUser();
 
     if (!restaurantId) {
-      throw new UnauthorizedError();
+      throw new NotAManagerError();
     }
 
     const order = await db.query.orders.findFirst({
@@ -28,20 +28,20 @@ export const deliverOrder = new Elysia().use(authentication).patch(
       throw new UnauthorizedError();
     }
 
-    if (order.status !== "delivering") {
-      set.status = 400;
-
-      return { message: "O pedido já foi enviado ao cliente." };
-    }
+    if (!['pending', 'processing'].includes(order.status)) {
+        set.status = 400
+  
+        return {
+          code: 'STATUS_NOT_VALID',
+          message: 'O pedido não pode ser cancelado depois de ser enviado.',
+        }
+      }
+  
 
     await db
       .update(orders)
-      .set({
-        status: "delivered",
-      })
+      .set({ status: "canceled" })
       .where(eq(orders.id, orderId));
-
-    set.status = 204;
   },
   {
     params: t.Object({

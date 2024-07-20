@@ -7,7 +7,11 @@ import { createSelectSchema } from "drizzle-typebox";
 
 export const getOrdersRestaurantRoute = new Elysia().use(authentication).get(
   "/orders",
-  async ({ query: { status, customerName, orderId }, getCurrentUser, set }) => {
+  async ({
+    query: { status, customerName, orderId, pageIndex },
+    getCurrentUser,
+    set,
+  }) => {
     const { restaurantId } = await getCurrentUser();
 
     if (!restaurantId) {
@@ -39,7 +43,10 @@ export const getOrdersRestaurantRoute = new Elysia().use(authentication).get(
       .select({ count: count() })
       .from(baseQuery.as("baseQuery"));
 
-    const allOrders = await baseQuery.orderBy((fields) => {
+    const allOrders = await baseQuery
+    .offset(pageIndex * 10)
+    .limit(10)
+    .orderBy((fields) => {
       return [
         sql`CASE ${fields.status} 
             WHEN 'pending' THEN 1
@@ -55,6 +62,8 @@ export const getOrdersRestaurantRoute = new Elysia().use(authentication).get(
     const result = {
       orders: allOrders,
       meta: {
+        pageIndex,
+        perPage: 10,
         totalCount: ordersCount.count,
       },
     };
@@ -66,6 +75,7 @@ export const getOrdersRestaurantRoute = new Elysia().use(authentication).get(
       customerName: t.Optional(t.String()),
       orderId: t.Optional(t.String()),
       status: t.Optional(createSelectSchema(orders).properties.status),
+      pageIndex: t.Numeric({ minimum: 0 }),
     }),
   }
 );

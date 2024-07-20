@@ -25,6 +25,7 @@ import { dispatchOrder } from "./routes/dispatch-order";
 import { deliverOrder } from "./routes/deliver-order";
 import { restaurants } from "../db/schema";
 import { updateProfile } from "./routes/update-profile.route";
+import { canceledOrder } from "./routes/cancel-order";
 
 new Elysia()
   .use(
@@ -67,6 +68,7 @@ new Elysia()
   .use(dispatchOrder)
   .use(deliverOrder)
   .use(updateProfile)
+  .use(canceledOrder)
 
   .listen(3333, ({ hostname, port }) => {
     console.log(`🔥 HTTP server running at http://${hostname}:${port}`);
